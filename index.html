@@ -1,5 +1,4 @@
-
-  
+ 
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -72,7 +71,7 @@
         
         .pointer {
             position: absolute;
-            top: 0;
+            top: -10px;
             left: 50%;
             transform: translateX(-50%);
             width: 30px;
@@ -240,10 +239,10 @@
     
     <script>
         const prizes = [
-            { name: "镭射贴纸", color: "#FF9E9E" },
-            { name: "手腕气球", color: "#A0E7E5" },
-            { name: "玩具盲袋", color: "#B5EAEA" },
-            { name: "驱蚊手环", color: "#FFD5CD" }
+            { name: "镭射贴纸一张", color: "#FF9E9E" },
+            { name: "手腕气球一个", color: "#A0E7E5" },
+            { name: "玩具盲袋一个", color: "#B5EAEA" },
+            { name: "驱蚊手环一个", color: "#FFD5CD" }
         ];
         
         const wheel = document.getElementById('wheel');
@@ -297,15 +296,20 @@
             const sectorAngle = 360 / prizes.length;
             
             // 计算旋转角度 (多转几圈后停在选中的奖品)
-            const extraRotations = 9; // 额外旋转圈数
-            // 修正角度计算，确保指针停在选中的奖品上
+            const extraRotations = 5; // 额外旋转圈数
+            // 精确计算指针应该指向的位置
             const targetAngle = 360 * extraRotations + (360 - (prizeIndex * sectorAngle + sectorAngle/2));
             
             wheel.style.transform = `rotate(${targetAngle}deg)`;
             
             // 旋转结束后显示结果
             setTimeout(() => {
-                result.textContent = `恭喜获得: ${prizes[prizeIndex].name}`;
+                // 确保指针精确指向所选奖品
+                const finalAngle = targetAngle % 360;
+                const calculatedIndex = Math.floor((360 - finalAngle + sectorAngle/2) / sectorAngle) % prizes.length;
+                const actualPrize = prizes[calculatedIndex];
+                
+                result.textContent = `恭喜获得: ${actualPrize.name}`;
                 createConfetti();
                 spinBtn.disabled = false;
             }, 4000);
